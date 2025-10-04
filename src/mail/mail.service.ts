@@ -85,4 +85,19 @@ export class MailService {
       throw new Error('No se pudo enviar el correo de restablecimiento de contraseña');
     }
   }
+
+  async sendCustomEmail(to: string, subject: string, html: string) {
+    try {
+      await this.transporter.sendMail({
+        from: this.defaultFrom,
+        to,
+        subject,
+        html,
+      });
+      this.logger.log(`Correo personalizado enviado a ${to}`);
+    } catch (error) {
+      this.logger.error('Error al enviar correo personalizado:', error);
+      throw new Error('No se pudo enviar el correo');
+    }
+  }
 }
