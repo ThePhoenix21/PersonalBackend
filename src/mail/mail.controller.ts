@@ -6,7 +6,6 @@ import escape from 'escape-html';
 @Controller('contact')
 export class MailController {
   private readonly logger = new Logger(MailController.name);
-  private readonly RECIPIENT_EMAIL = 'jamescorcam@gmail.com';
 
   constructor(private readonly mailService: MailService) {}
 
@@ -14,7 +13,7 @@ export class MailController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async sendContactEmail(@Body() contactData: ContactDto) {
     try {
-      const { nombre, apellido, email, asunto, mensaje } = contactData;
+      const { nombre, apellido, email, asunto, mensaje, toEmail } = contactData;
 
       // Escapamos HTML para seguridad
       const emailContent = `
@@ -26,12 +25,12 @@ export class MailController {
       `;
 
       await this.mailService.sendCustomEmail(
-        this.RECIPIENT_EMAIL,
+        toEmail, // ahora se usa el correo del DTO
         `Contacto: ${escape(asunto)}`,
         emailContent
       );
 
-      this.logger.log(`Mensaje de contacto enviado de ${email} a ${this.RECIPIENT_EMAIL}`);
+      this.logger.log(`Mensaje de contacto enviado de ${email} a ${toEmail}`);
       
       return { success: true, message: 'Mensaje enviado correctamente' };
     } catch (error) {

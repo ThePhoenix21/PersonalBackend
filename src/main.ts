@@ -8,11 +8,12 @@ async function bootstrap() {
   
   // Configuración de CORS para desarrollo
   app.enableCors({
-    origin: process.env.NODE_ENV === 'development'
-      ? '*' 
-      : 'https://portfolio-eduardo-ramirez-germany.vercel.app', // URL permitida en producción
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept, Authorization',
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? '*'
+        : 'https://portfolio-eduardo-ramirez-germany.vercel.app',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   });
 
   // Configuración de Swagger

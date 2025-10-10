@@ -10,7 +10,11 @@ export class ContactDto {
   apellido: string;
 
   @IsEmail()
-  email: string;
+  email: string; // correo del remitente
+
+  @IsNotEmpty()
+  @IsEmail()
+  toEmail: string; // nuevo campo, correo del destinatario
 
   @IsNotEmpty()
   @MaxLength(100)
