@@ -11,7 +11,10 @@ async function bootstrap() {
     origin:
       process.env.NODE_ENV === 'development'
         ? '*'
-        : 'https://portfolio-eduardo-ramirez-germany.vercel.app',
+        : [
+          `${process.env.PORTFOLIO_EDUARDO}`,
+          `${process.env.FRONTEND_URL}`
+        ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   });
