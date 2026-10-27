@@ -33,7 +33,7 @@ export class MailController {
 
       // Escapamos HTML para seguridad
       const emailContent = `
-        <h2>Nuevo mensaje de contacto</h2>
+        <h2>Nuevo mensaje de tu portfolio</h2>
         <p><strong>De:</strong> ${escape(nombre)} ${escape(apellido)} (${escape(email)})</p>
         <p><strong>Asunto:</strong> ${escape(asunto)}</p>
         <h4>Mensaje:</h4>
