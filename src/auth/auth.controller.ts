@@ -1,4 +1,5 @@
 import { Controller, Post, Body, Get, Query, Res, Req, Patch, HttpStatus, Inject, forwardRef, UnauthorizedException, UseGuards, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CreateUserRequestDto } from './dto/create-user-request.dto';
@@ -23,6 +24,7 @@ export class AuthController {
     ) {}
 
     @Post('register')
+    @Throttle({ default: { limit: 3, ttl: 60000 } })
     @ApiOperation({ summary: 'Registrar nuevo usuario', description: 'Crea una nueva cuenta de usuario' })
     @ApiResponse({ 
         status: 201, 
@@ -115,6 +117,7 @@ export class AuthController {
     }
 
     @Post('login')
+    @Throttle({ default: { limit: 5, ttl: 60000 } })
     @ApiOperation({ summary: 'Iniciar sesión', description: 'Autentica un usuario y devuelve tokens de acceso y actualización' })
     @ApiResponse({ 
         status: 200, 
@@ -292,6 +295,7 @@ export class AuthController {
     }
 
     @Post('request-password-reset')
+    @Throttle({ default: { limit: 3, ttl: 60000 } })
     @ApiOperation({ summary: 'Solicitar restablecimiento de contraseña', description: 'Envía un correo electrónico con un enlace para restablecer la contraseña' })
     @ApiResponse({ status: 200, description: 'Si el correo existe, se enviarán instrucciones para restablecer la contraseña' })
     @ApiBody({ 

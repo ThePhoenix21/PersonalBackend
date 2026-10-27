@@ -1,4 +1,5 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { MailService } from './mail.service';
 import { ContactDto } from './dto/contact.dto';
 import escape from 'escape-html';
@@ -19,6 +20,7 @@ export class MailController {
   }
 
   @Post()
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async sendContactEmail(@Body() contactData: ContactDto) {
     try {

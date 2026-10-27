@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserRequestDto {
@@ -7,6 +7,7 @@ export class CreateUserRequestDto {
     description: 'Correo electrónico del usuario',
   })
   @IsEmail({}, { message: 'El correo electrónico no tiene un formato válido' })
+  @MaxLength(255)
   email: string;
 
   @ApiProperty({
@@ -22,6 +23,7 @@ export class CreateUserRequestDto {
     description: 'Nombre completo del usuario',
   })
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  @MaxLength(100)
   name: string;
 
   @ApiProperty({
@@ -29,6 +31,7 @@ export class CreateUserRequestDto {
     description: 'Nombre de usuario único',
   })
   @IsNotEmpty({ message: 'El nombre de usuario es obligatorio' })
+  @MaxLength(100)
   username: string;
 
   @ApiProperty({
@@ -38,6 +41,7 @@ export class CreateUserRequestDto {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(20)
   phone?: string;
 
   @ApiProperty({
@@ -56,6 +60,7 @@ export class CreateUserRequestDto {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(50)
   language?: string;
 
   @ApiProperty({
@@ -65,5 +70,6 @@ export class CreateUserRequestDto {
   })
   @IsOptional()
   @IsString()
+  @MaxLength(50)
   timezone?: string;
 }

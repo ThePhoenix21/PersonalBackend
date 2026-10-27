@@ -1,4 +1,5 @@
 import { Controller, Get, Logger, NotFoundException, Res } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import type { Response } from 'express';
 import { CvService } from './cv.service';
 
@@ -9,6 +10,7 @@ export class CvController {
   constructor(private readonly cvService: CvService) {}
 
   @Get()
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   async getCv(@Res() res: Response) {
     let stream: Awaited<ReturnType<CvService['getCvStream']>>;
 
