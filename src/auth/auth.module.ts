@@ -20,10 +20,16 @@ import { EmailValidatorService } from '../common/validators/email-validator.serv
     ScheduleModule.forRoot(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'superSecretKey',
-        signOptions: { expiresIn: '1h' },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret) {
+          throw new Error('JWT_SECRET no está definido en las variables de entorno');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: '1h' },
+        };
+      },
       inject: [ConfigService],
     }),
   ],

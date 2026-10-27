@@ -9,11 +9,25 @@ export class MailController {
 
   constructor(private readonly mailService: MailService) {}
 
+  private isAllowedContactEmail(toEmail: string): boolean {
+    const allowed = (process.env.ALLOWED_CONTACT_EMAILS || '')
+      .split(',')
+      .map((e) => e.trim().toLowerCase())
+      .filter((e) => e.length > 0);
+
+    return allowed.includes(toEmail.trim().toLowerCase());
+  }
+
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async sendContactEmail(@Body() contactData: ContactDto) {
     try {
       const { nombre, apellido, email, asunto, mensaje, toEmail } = contactData;
+
+      if (!this.isAllowedContactEmail(toEmail)) {
+        this.logger.warn(`Intento de contacto con destinatario no permitido: ${toEmail}`);
+        throw new BadRequestException('Destinatario no permitido');
+      }
 
       // Escapamos HTML para seguridad
       const emailContent = `
